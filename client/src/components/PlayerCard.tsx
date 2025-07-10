@@ -12,7 +12,7 @@ import {
   MinusIcon,
   ShoppingCartIcon
 } from '@heroicons/react/24/outline';
-import { getPositionColor } from '@/utils';
+import { formatCurrency, getPositionColor } from '@/utils';
 
 interface PlayerCardProps {
   player: Player;
@@ -27,14 +27,6 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<{ askingPrice: number }>();
 
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
 
   const handleAddToTransferList = async (data: { askingPrice: number }) => {
     try {

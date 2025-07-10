@@ -38,3 +38,12 @@ export const getPositionColor = (pos: string, type: 'gradient' | 'badge' = 'grad
         return 'from-gray-400 to-gray-500';
     }
   };
+
+
+    export const formatCurrency = (amount: number) => {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+      }).format(amount);
+    };

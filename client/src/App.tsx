@@ -64,7 +64,7 @@ const Navigation: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg">
+    <nav className="fixed top-0 w-full bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center">
           <div className="flex space-x-1">
@@ -76,7 +76,7 @@ const Navigation: React.FC = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`group relative inline-flex items-center px-6 py-4 text-sm font-medium transition-all duration-200 ${
+                  className={`group relative inline-flex items-center px-6 py-3 text-sm font-medium transition-all duration-200 ${
                     isActive
                       ? 'text-white bg-blue-800 shadow-lg'
                       : 'text-blue-100 hover:text-white hover:bg-blue-600'

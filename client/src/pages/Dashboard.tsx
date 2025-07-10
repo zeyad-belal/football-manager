@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import Layout from '@/components/Layout';
-import PlayerCard from '@/components/PlayerCard';
-import FieldView from '@/components/FieldView';
-import { PlayerPosition } from '@/types';
-import { 
-  UsersIcon, 
+import React, { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import Layout from "@/components/Layout";
+import PlayerCard from "@/components/PlayerCard";
+import FieldView from "@/components/FieldView";
+import { PlayerPosition } from "@/types";
+import {
+  UsersIcon,
   CurrencyDollarIcon,
   ChartBarIcon,
   ClockIcon,
-  RectangleGroupIcon
-} from '@heroicons/react/24/outline';
+  RectangleGroupIcon,
+} from "@heroicons/react/24/outline";
 
 const Dashboard: React.FC = () => {
-  const { user, team, refreshProfile } = useAuth();
-  const [selectedPosition, setSelectedPosition] = useState<PlayerPosition | 'all'>('all');
+  const { team, refreshProfile } = useAuth();
+  const [selectedPosition, setSelectedPosition] = useState<
+    PlayerPosition | "all"
+  >("all");
   const [showFieldView, setShowFieldView] = useState(false);
 
   if (!team) {
@@ -23,14 +25,13 @@ const Dashboard: React.FC = () => {
         <div className="flex items-center justify-center min-h-96">
           <div className="text-center">
             <ClockIcon className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Team Creation in Progress</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              Team Creation in Progress
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
               Your team is being created. This may take a few moments.
             </p>
-            <button
-              onClick={refreshProfile}
-              className="mt-4 btn-primary"
-            >
+            <button onClick={refreshProfile} className="mt-4 btn-primary">
               Refresh
             </button>
           </div>
@@ -39,20 +40,23 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  const filteredPlayers = selectedPosition === 'all' 
-    ? team.players 
-    : team.players.filter(player => player.position === selectedPosition);
+  const filteredPlayers =
+    selectedPosition === "all"
+      ? team.players
+      : team.players.filter((player) => player.position === selectedPosition);
 
   const getPlayerCountByPosition = (position: PlayerPosition) => {
-    return team.players.filter(player => player.position === position).length;
+    return team.players.filter((player) => player.position === position).length;
   };
 
-  const playersOnTransferList = team.players.filter(player => player.isOnTransferList).length;
+  const playersOnTransferList = team.players.filter(
+    (player) => player.isOnTransferList
+  ).length;
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
     }).format(amount);
   };
@@ -134,7 +138,12 @@ const Dashboard: React.FC = () => {
                       Team Value
                     </dt>
                     <dd className="text-lg font-medium text-gray-900">
-                      {formatCurrency(team.players.reduce((sum, player) => sum + player.value, 0))}
+                      {formatCurrency(
+                        team.players.reduce(
+                          (sum, player) => sum + player.value,
+                          0
+                        )
+                      )}
                     </dd>
                   </dl>
                 </div>
@@ -185,11 +194,11 @@ const Dashboard: React.FC = () => {
           <div className="flex flex-wrap gap-2 justify-between items-center">
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setSelectedPosition('all')}
+                onClick={() => setSelectedPosition("all")}
                 className={`px-4 py-2 rounded-md text-sm font-medium ${
-                  selectedPosition === 'all'
-                    ? 'bg-primary-100 text-primary-700 border border-primary-200'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  selectedPosition === "all"
+                    ? "bg-primary-100 text-primary-700 border border-primary-200"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                 }`}
               >
                 All Players ({team.players.length})
@@ -200,15 +209,15 @@ const Dashboard: React.FC = () => {
                   onClick={() => setSelectedPosition(position)}
                   className={`px-4 py-2 rounded-md text-sm font-medium ${
                     selectedPosition === position
-                      ? 'bg-primary-100 text-primary-700 border border-primary-200'
-                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                      ? "bg-primary-100 text-primary-700 border border-primary-200"
+                      : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                   }`}
                 >
                   {position}s ({getPlayerCountByPosition(position)})
                 </button>
               ))}
             </div>
-            
+
             {/* Field View Button */}
             <button
               onClick={() => setShowFieldView(true)}
@@ -235,7 +244,9 @@ const Dashboard: React.FC = () => {
         {filteredPlayers.length === 0 && (
           <div className="text-center py-12">
             <UsersIcon className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No players found</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No players found
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
               No players match the selected position filter.
             </p>
