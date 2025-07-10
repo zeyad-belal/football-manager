@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { UserIcon, CurrencyDollarIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { formatCurrency } from '@/utils';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,14 +9,6 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, team, logout } = useAuth();
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 mt-12">
