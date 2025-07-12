@@ -5,12 +5,12 @@ import PlayerCard from "@/components/PlayerCard";
 import FieldView from "@/components/FieldView";
 import { PlayerPosition } from "@/types";
 import {
-  UsersIcon,
-  CurrencyDollarIcon,
-  ChartBarIcon,
-  ClockIcon,
-  RectangleGroupIcon,
-} from "@heroicons/react/24/outline";
+  Users,
+  DollarSign,
+  BarChart3,
+  Clock,
+  Grid3X3,
+} from "lucide-react";
 
 const Dashboard: React.FC = () => {
   const { team, refreshProfile } = useAuth();
@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
       <Layout>
         <div className="flex items-center justify-center min-h-96">
           <div className="text-center">
-            <ClockIcon className="mx-auto h-12 w-12 text-gray-400" />
+            <Clock className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">
               Team Creation in Progress
             </h3>
@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
             <div className="card-body">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <UsersIcon className="h-8 w-8 text-gray-400" />
+                  <Users className="h-8 w-8 text-gray-400" />
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
             <div className="card-body">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <CurrencyDollarIcon className="h-8 w-8 text-gray-400" />
+                  <DollarSign className="h-8 w-8 text-gray-400" />
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
@@ -110,7 +110,7 @@ const Dashboard: React.FC = () => {
             <div className="card-body">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <ChartBarIcon className="h-8 w-8 text-gray-400" />
+                  <BarChart3 className="h-8 w-8 text-gray-400" />
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
@@ -130,7 +130,7 @@ const Dashboard: React.FC = () => {
             <div className="card-body">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <UsersIcon className="h-8 w-8 text-gray-400" />
+                  <Users className="h-8 w-8 text-gray-400" />
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
@@ -223,7 +223,7 @@ const Dashboard: React.FC = () => {
               onClick={() => setShowFieldView(true)}
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 transition-colors shadow-sm"
             >
-              <RectangleGroupIcon className="h-4 w-4 mr-2" />
+              <Grid3X3 className="h-4 w-4 mr-2" />
               Field View
             </button>
           </div>
@@ -243,7 +243,7 @@ const Dashboard: React.FC = () => {
 
         {filteredPlayers.length === 0 && (
           <div className="text-center py-12">
-            <UsersIcon className="mx-auto h-12 w-12 text-gray-400" />
+            <Users className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">
               No players found
             </h3>

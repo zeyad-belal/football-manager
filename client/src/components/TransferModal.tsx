@@ -3,9 +3,9 @@ import { Player } from '@/types';
 import { useForm } from 'react-hook-form';
 import { Dialog } from '@headlessui/react';
 import { 
-  CurrencyDollarIcon, 
-  XMarkIcon
-} from '@heroicons/react/24/outline';
+  DollarSign, 
+  X
+} from 'lucide-react';
 import { formatCurrency } from '@/utils';
 
 interface TransferModalProps {
@@ -52,7 +52,7 @@ const TransferModal: React.FC<TransferModalProps> = ({
               onClick={handleClose}
               className="text-gray-400 hover:text-gray-600"
             >
-              <XMarkIcon className="h-5 w-5" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
@@ -71,7 +71,7 @@ const TransferModal: React.FC<TransferModalProps> = ({
                 Asking Price
               </label>
               <div className="relative">
-                <CurrencyDollarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   {...register('askingPrice', {
                     required: 'Asking price is required',

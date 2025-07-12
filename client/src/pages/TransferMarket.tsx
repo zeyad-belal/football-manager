@@ -5,10 +5,10 @@ import PlayerCard from '@/components/PlayerCard';
 import { transferService } from '@/services/api';
 import { Player, PlayerPosition, TransferFilters } from '@/types';
 import { 
-  MagnifyingGlassIcon, 
-  FunnelIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline';
+  Search, 
+  Filter,
+  X
+} from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const TransferMarket: React.FC = () => {
@@ -88,7 +88,7 @@ const TransferMarket: React.FC = () => {
               onClick={() => setShowFilters(!showFilters)}
               className="btn-secondary flex items-center"
             >
-              <FunnelIcon className="h-4 w-4 mr-2" />
+              <Filter className="h-4 w-4 mr-2" />
               Filters
             </button>
           </div>
@@ -104,7 +104,7 @@ const TransferMarket: React.FC = () => {
                   onClick={() => setShowFilters(false)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  <XMarkIcon className="h-5 w-5" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -178,7 +178,7 @@ const TransferMarket: React.FC = () => {
 
                 <div className="flex space-x-3">
                   <button type="submit" className="btn-primary flex items-center">
-                    <MagnifyingGlassIcon className="h-4 w-4 mr-2" />
+                    <Search className="h-4 w-4 mr-2" />
                     Search
                   </button>
                   <button
@@ -225,7 +225,7 @@ const TransferMarket: React.FC = () => {
             {/* Empty State */}
             {players.length === 0 && (
               <div className="text-center py-12">
-                <MagnifyingGlassIcon className="mx-auto h-12 w-12 text-gray-400" />
+                <Search className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No players found</h3>
                 <p className="mt-1 text-sm text-gray-500">
                   Try adjusting your search filters or check back later.

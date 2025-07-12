@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { HomeIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
+import { Home, ArrowLeftRight } from 'lucide-react';
 import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
 import TransferMarket from '@/pages/TransferMarket';
@@ -54,12 +54,12 @@ const Navigation: React.FC = () => {
     {
       path: '/dashboard',
       label: 'My Team',
-      icon: HomeIcon,
+      icon: Home,
     },
     {
       path: '/transfer-market',
       label: 'Transfer Market',
-      icon: ArrowsRightLeftIcon,
+      icon: ArrowLeftRight,
     },
   ];
 

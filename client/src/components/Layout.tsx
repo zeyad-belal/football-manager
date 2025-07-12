@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { UserIcon, CurrencyDollarIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { User, DollarSign, LogOut } from 'lucide-react';
 import { formatCurrency } from '@/utils';
 
 interface LayoutProps {
@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <span className="font-medium">{team.name}</span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
-                    <CurrencyDollarIcon className="h-4 w-4 mr-1" />
+                    <DollarSign className="h-4 w-4 mr-1" />
                     <span className="font-medium">{formatCurrency(team.budget)}</span>
                   </div>
                 </div>
@@ -35,14 +35,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             
             <div className="flex items-center space-x-4">
               <div className="flex items-center text-sm text-gray-600">
-                <UserIcon className="h-4 w-4 mr-2" />
+                <User className="h-4 w-4 mr-2" />
                 <span>{user?.email}</span>
               </div>
               <button
                 onClick={logout}
                 className="btn-secondary flex items-center"
               >
-                <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2" />
+                <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </button>
             </div>

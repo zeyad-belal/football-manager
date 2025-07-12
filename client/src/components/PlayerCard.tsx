@@ -4,10 +4,10 @@ import { useAuth } from '@/context/AuthContext';
 import { transferService } from '@/services/api';
 import toast from 'react-hot-toast';
 import { 
-  PlusIcon,
-  MinusIcon,
-  ShoppingCartIcon
-} from '@heroicons/react/24/outline';
+  Plus,
+  Minus,
+  ShoppingCart
+} from 'lucide-react';
 import { formatCurrency, getPositionColor } from '@/utils';
 import TransferModal from './TransferModal';
 
@@ -120,7 +120,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
                     <div className="spinner" />
                   ) : (
                     <>
-                      <MinusIcon className="h-4 w-4 mr-1" />
+                      <Minus className="h-4 w-4 mr-1" />
                       Remove from List
                     </>
                   )}
@@ -130,7 +130,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
                   onClick={() => setIsTransferModalOpen(true)}
                   className="btn-primary flex-1 flex items-center justify-center"
                 >
-                  <PlusIcon className="h-4 w-4 mr-1" />
+                  <Plus className="h-4 w-4 mr-1" />
                   List for Transfer
                 </button>
               )
@@ -147,7 +147,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
                     <div className="spinner" />
                   ) : (
                     <>
-                      <ShoppingCartIcon className="h-4 w-4 mr-1" />
+                      <ShoppingCart className="h-4 w-4 mr-1" />
                       {canBuy ? 'Buy Player' : 'Insufficient Budget'}
                     </>
                   )}

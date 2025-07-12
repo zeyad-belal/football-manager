@@ -8,7 +8,7 @@ import {
 } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DragItem, Player, PlayerPosition } from "@/types";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { X } from "lucide-react";
 import { getPositionColor } from "@/utils";
 
 interface FieldViewProps {
@@ -438,7 +438,7 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
                 onClick={onClose}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <XMarkIcon className="h-6 w-6 text-gray-500" />
+                <X className="h-6 w-6 text-gray-500" />
               </button>
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
