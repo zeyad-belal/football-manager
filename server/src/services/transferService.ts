@@ -16,6 +16,16 @@ export class TransferService {
       throw new Error('You can only list your own players');
     }
     
+    // Check if team would have less than 15 players after listing this one
+    const teamPlayersCount = await Player.countDocuments({ 
+      teamId: (team._id as any).toString(),
+      isOnTransferList: false 
+    });
+    
+    if (teamPlayersCount <= 15) {
+      throw new Error('Cannot list player: Team must have at least 15 players not on transfer list');
+    }
+    
     // Update player
     player.isOnTransferList = true;
     player.askingPrice = askingPrice;

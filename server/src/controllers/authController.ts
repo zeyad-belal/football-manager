@@ -1,33 +1,15 @@
 import { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
 import { User } from '@/models/User';
 import { TeamService } from '@/services/teamService';
 import { generateToken } from '@/utils/jwt';
 import { ApiResponse, AuthRequest } from '@/types';
+import { authValidation } from '@/utils/authSchemas';
 
-export const authValidation = [
-  body('email')
-    .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email'),
-  body('password')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long')
-];
+// Export validation middleware
+export { authValidation };
 
 export const loginOrRegister = async (req: Request, res: Response): Promise<void> => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const response: ApiResponse = {
-        success: false,
-        message: 'Validation failed',
-        error: errors.array().map(err => err.msg).join(', ')
-      };
-      res.status(400).json(response);
-      return;
-    }
-
     const { email, password } = req.body;
 
     // Check if user exists

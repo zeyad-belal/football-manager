@@ -72,14 +72,32 @@ export class TeamService {
   }
   
   static async addPlayerToTeam(teamId: string, playerId: string): Promise<void> {
-    await Team.findByIdAndUpdate(teamId, {
-      $push: { players: playerId }
-    });
+    const team = await Team.findById(teamId);
+    if (!team) {
+      throw new Error('Team not found');
+    }
+    
+    // Check if adding this player would exceed the limit
+    if (team.players.length >= 25) {
+      throw new Error('Cannot add player: Team already has maximum of 25 players');
+    }
+    
+    team.players.push(playerId);
+    await team.save();
   }
   
   static async removePlayerFromTeam(teamId: string, playerId: string): Promise<void> {
-    await Team.findByIdAndUpdate(teamId, {
-      $pull: { players: playerId }
-    });
+    const team = await Team.findById(teamId);
+    if (!team) {
+      throw new Error('Team not found');
+    }
+    
+    // Check if removing this player would go below the minimum
+    if (team.players.length <= 15) {
+      throw new Error('Cannot remove player: Team must have at least 15 players');
+    }
+    
+    team.players = team.players.filter(id => id !== playerId);
+    await team.save();
   }
 }

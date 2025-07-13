@@ -1,54 +1,16 @@
 import { Response } from 'express';
-import { body, query, validationResult } from 'express-validator';
 import { TransferService } from '@/services/transferService';
-import { ApiResponse, AuthRequest, PlayerPosition } from '@/types';
+import { ApiResponse, AuthRequest } from '@/types';
+import { 
+  addToTransferListValidation, 
+  transferFiltersValidation 
+} from '@/utils/transferSchemas';
 
-export const addToTransferListValidation = [
-  body('playerId')
-    .notEmpty()
-    .withMessage('Player ID is required'),
-  body('askingPrice')
-    .isNumeric()
-    .isFloat({ min: 1 })
-    .withMessage('Asking price must be a positive number')
-];
-
-export const transferFiltersValidation = [
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
-  query('limit')
-    .optional()
-    .isInt({ min: 1, max: 50 })
-    .withMessage('Limit must be between 1 and 50'),
-  query('minPrice')
-    .optional()
-    .isNumeric()
-    .withMessage('Min price must be a number'),
-  query('maxPrice')
-    .optional()
-    .isNumeric()
-    .withMessage('Max price must be a number'),
-  query('position')
-    .optional()
-    .isIn(Object.values(PlayerPosition))
-    .withMessage('Invalid position')
-];
+// Export validation middleware
+export { addToTransferListValidation, transferFiltersValidation };
 
 export const addPlayerToTransferList = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const response: ApiResponse = {
-        success: false,
-        message: 'Validation failed',
-        error: errors.array().map(err => err.msg).join(', ')
-      };
-      res.status(400).json(response);
-      return;
-    }
-
     const { playerId, askingPrice } = req.body;
     const userId = req.user!.id;
 
@@ -93,39 +55,29 @@ export const removePlayerFromTransferList = async (req: AuthRequest, res: Respon
 
 export const getTransferMarket = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const response: ApiResponse = {
-        success: false,
-        message: 'Validation failed',
-        error: errors.array().map(err => err.msg).join(', ')
-      };
-      res.status(400).json(response);
-      return;
-    }
-
+    // After validation, req.query will have the correct types from our zod schema
     const {
-      page = 1,
-      limit = 20,
+      page,
+      limit,
       teamName,
       playerName,
       minPrice,
       maxPrice,
       position
-    } = req.query;
+    } = req.query as any; // Type assertion since zod validation ensures correct types
 
     const filters = {
-      teamName: teamName as string,
-      playerName: playerName as string,
-      minPrice: minPrice ? Number(minPrice) : undefined,
-      maxPrice: maxPrice ? Number(maxPrice) : undefined,
-      position: position as PlayerPosition
+      teamName,
+      playerName,
+      minPrice,
+      maxPrice,
+      position
     };
 
     const result = await TransferService.getTransferMarket(
       filters,
-      Number(page),
-      Number(limit)
+      page,
+      limit
     );
 
     const response: ApiResponse = {

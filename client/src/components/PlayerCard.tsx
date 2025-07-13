@@ -65,7 +65,19 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
     }
   };
 
-  const canBuy = !isOwned && player.isOnTransferList && team && team.budget >= (player.askingPrice || 0) * 0.95;
+  // Calculate available players (not on transfer list)
+  const availablePlayers = team?.players?.filter(p => !p.isOnTransferList) || [];
+  const totalPlayers = team?.players?.length || 0;
+  
+  // Check if user can list this player (must have more than 15 available players)
+  const canListPlayer = isOwned && !player.isOnTransferList && availablePlayers.length > 15;
+  
+  // Check if user can buy (must have less than 25 total players and sufficient budget)
+  const canBuy = !isOwned && 
+    player.isOnTransferList && 
+    team && 
+    team.budget >= (player.askingPrice || 0) * 0.95 &&
+    totalPlayers < 25;
 
   return (
     <>
@@ -128,10 +140,14 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
               ) : (
                 <button
                   onClick={() => setIsTransferModalOpen(true)}
-                  className="btn-primary flex-1 flex items-center justify-center"
+                  disabled={!canListPlayer}
+                  className={`flex-1 flex items-center justify-center ${
+                    canListPlayer ? 'btn-primary' : 'btn-secondary opacity-50 cursor-not-allowed'
+                  }`}
+                  title={!canListPlayer ? 'Cannot list: Team must have more than 15 available players' : ''}
                 >
                   <Plus className="h-4 w-4 mr-1" />
-                  List for Transfer
+                  {canListPlayer ? 'List for Transfer' : 'Cannot List'}
                 </button>
               )
             ) : (
@@ -142,13 +158,25 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
                   className={`flex-1 flex items-center justify-center ${
                     canBuy ? 'btn-success' : 'btn-secondary opacity-50 cursor-not-allowed'
                   }`}
+                  title={
+                    !canBuy 
+                      ? totalPlayers >= 25 
+                        ? 'Cannot buy: Team already has 25 players' 
+                        : 'Insufficient budget'
+                      : ''
+                  }
                 >
                   {isLoading ? (
                     <div className="spinner" />
                   ) : (
                     <>
                       <ShoppingCart className="h-4 w-4 mr-1" />
-                      {canBuy ? 'Buy Player' : 'Insufficient Budget'}
+                      {canBuy 
+                        ? 'Buy Player' 
+                        : totalPlayers >= 25 
+                          ? 'Team Full' 
+                          : 'Insufficient Budget'
+                      }
                     </>
                   )}
                 </button>
