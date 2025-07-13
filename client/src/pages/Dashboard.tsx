@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import Layout from "@/components/Layout";
+import Layout from "@/Layout/Layout";
 import PlayerCard from "@/components/PlayerCard";
 import FieldView from "@/components/FieldView";
 import { PlayerPosition } from "@/types";
-import {
-  Users,
-  DollarSign,
-  BarChart3,
-  Clock,
-  Grid3X3,
-} from "lucide-react";
+import { Users, DollarSign, BarChart3, Clock, Grid3X3 } from "lucide-react";
+import { formatCurrency } from "@/utils";
 
 const Dashboard: React.FC = () => {
   const { team, refreshProfile } = useAuth();
@@ -52,14 +47,6 @@ const Dashboard: React.FC = () => {
   const playersOnTransferList = team.players.filter(
     (player) => player.isOnTransferList
   ).length;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
 
   return (
     <Layout>

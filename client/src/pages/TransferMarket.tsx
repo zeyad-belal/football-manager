@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import Layout from '@/components/Layout';
-import PlayerCard from '@/components/PlayerCard';
-import { transferService } from '@/services/api';
-import { Player, PlayerPosition, TransferFilters } from '@/types';
-import { 
-  Search, 
-  Filter,
-  X
-} from 'lucide-react';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import Layout from "@/Layout/Layout";
+import PlayerCard from "@/components/PlayerCard";
+import { transferService } from "@/services/api";
+import { Player, PlayerPosition, TransferFilters } from "@/types";
+import { Search, Filter, X } from "lucide-react";
+import toast from "react-hot-toast";
 
 const TransferMarket: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -20,18 +16,27 @@ const TransferMarket: React.FC = () => {
 
   const { register, handleSubmit, watch, reset } = useForm<TransferFilters>();
 
-  const loadTransferMarket = async (filters: TransferFilters = {}, page = 1) => {
+  const loadTransferMarket = async (
+    filters: TransferFilters = {},
+    page = 1
+  ) => {
     try {
       setIsLoading(true);
-      const response = await transferService.getTransferMarket(filters, page, 20);
-      
+      const response = await transferService.getTransferMarket(
+        filters,
+        page,
+        20
+      );
+
       if (response.success && response.data) {
         setPlayers(response.data.players);
         setCurrentPage(response.data.pagination.page);
         setTotalPages(response.data.pagination.pages);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to load transfer market');
+      toast.error(
+        error.response?.data?.message || "Failed to load transfer market"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -44,7 +49,9 @@ const TransferMarket: React.FC = () => {
   const onSubmit = (data: TransferFilters) => {
     // Remove empty values
     const filters = Object.fromEntries(
-      Object.entries(data).filter(([_, value]) => value !== '' && value !== undefined)
+      Object.entries(data).filter(
+        ([_, value]) => value !== "" && value !== undefined
+      )
     );
     loadTransferMarket(filters, 1);
     setShowFilters(false);
@@ -59,17 +66,11 @@ const TransferMarket: React.FC = () => {
   const handlePageChange = (page: number) => {
     const filters = watch();
     const cleanFilters = Object.fromEntries(
-      Object.entries(filters).filter(([_, value]) => value !== '' && value !== undefined)
+      Object.entries(filters).filter(
+        ([_, value]) => value !== "" && value !== undefined
+      )
     );
     loadTransferMarket(cleanFilters, page);
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    }).format(amount);
   };
 
   return (
@@ -79,7 +80,9 @@ const TransferMarket: React.FC = () => {
         <div className="mb-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Transfer Market</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Transfer Market
+              </h1>
               <p className="mt-1 text-sm text-gray-500">
                 Buy players from other teams at 95% of their asking price
               </p>
@@ -116,7 +119,7 @@ const TransferMarket: React.FC = () => {
                       Player Name
                     </label>
                     <input
-                      {...register('playerName')}
+                      {...register("playerName")}
                       type="text"
                       className="input"
                       placeholder="Search by player name"
@@ -128,7 +131,7 @@ const TransferMarket: React.FC = () => {
                       Team Name
                     </label>
                     <input
-                      {...register('teamName')}
+                      {...register("teamName")}
                       type="text"
                       className="input"
                       placeholder="Search by team name"
@@ -139,7 +142,7 @@ const TransferMarket: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Position
                     </label>
-                    <select {...register('position')} className="input">
+                    <select {...register("position")} className="input">
                       <option value="">All Positions</option>
                       {Object.values(PlayerPosition).map((position) => (
                         <option key={position} value={position}>
@@ -154,7 +157,7 @@ const TransferMarket: React.FC = () => {
                       Min Price
                     </label>
                     <input
-                      {...register('minPrice', { valueAsNumber: true })}
+                      {...register("minPrice", { valueAsNumber: true })}
                       type="number"
                       className="input"
                       placeholder="Minimum price"
@@ -167,7 +170,7 @@ const TransferMarket: React.FC = () => {
                       Max Price
                     </label>
                     <input
-                      {...register('maxPrice', { valueAsNumber: true })}
+                      {...register("maxPrice", { valueAsNumber: true })}
                       type="number"
                       className="input"
                       placeholder="Maximum price"
@@ -177,7 +180,10 @@ const TransferMarket: React.FC = () => {
                 </div>
 
                 <div className="flex space-x-3">
-                  <button type="submit" className="btn-primary flex items-center">
+                  <button
+                    type="submit"
+                    className="btn-primary flex items-center"
+                  >
                     <Search className="h-4 w-4 mr-2" />
                     Search
                   </button>
@@ -207,7 +213,8 @@ const TransferMarket: React.FC = () => {
           <>
             <div className="mb-4">
               <p className="text-sm text-gray-600">
-                Showing {players.length} players on page {currentPage} of {totalPages}
+                Showing {players.length} players on page {currentPage} of{" "}
+                {totalPages}
               </p>
             </div>
 
@@ -226,7 +233,9 @@ const TransferMarket: React.FC = () => {
             {players.length === 0 && (
               <div className="text-center py-12">
                 <Search className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No players found</h3>
+                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                  No players found
+                </h3>
                 <p className="mt-1 text-sm text-gray-500">
                   Try adjusting your search filters or check back later.
                 </p>
@@ -255,7 +264,7 @@ const TransferMarket: React.FC = () => {
                 <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                   <div>
                     <p className="text-sm text-gray-700">
-                      Page <span className="font-medium">{currentPage}</span> of{' '}
+                      Page <span className="font-medium">{currentPage}</span> of{" "}
                       <span className="font-medium">{totalPages}</span>
                     </p>
                   </div>
@@ -268,23 +277,26 @@ const TransferMarket: React.FC = () => {
                       >
                         Previous
                       </button>
-                      
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        const page = i + 1;
-                        return (
-                          <button
-                            key={page}
-                            onClick={() => handlePageChange(page)}
-                            className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
-                              page === currentPage
-                                ? 'z-10 bg-primary-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
-                                : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        );
-                      })}
+
+                      {Array.from(
+                        { length: Math.min(5, totalPages) },
+                        (_, i) => {
+                          const page = i + 1;
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => handlePageChange(page)}
+                              className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                                page === currentPage
+                                  ? "z-10 bg-primary-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                                  : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        }
+                      )}
 
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
