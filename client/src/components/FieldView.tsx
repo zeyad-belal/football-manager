@@ -197,8 +197,11 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
         FORMATION_STORAGE_KEY,
         JSON.stringify(serializableFormation)
       );
-    } catch (error) {
-      toast.error("Failed to save formation to localStorage:", error);
+    } catch (error: any) {
+      toast.error(
+        "Failed to save formation to localStorage:",
+        error?.response?.data?.message
+      );
       console.error("Failed to save formation to localStorage:", error);
     }
   };
@@ -243,9 +246,8 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
     }
   };
 
-  // Initialize formation with best 11 players (sorted by value as proxy for quality)
+  // Initialize formation with best 11 players (sorted by value as indicator for quality)
   const initializeFormation = () => {
-    // First try to load from localStorage
     const savedFormation = loadFormationFromStorage();
     if (savedFormation) {
       return savedFormation;
