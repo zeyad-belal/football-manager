@@ -9,7 +9,8 @@ import {
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DragItem, Player, PlayerPosition } from "@/types";
 import { X } from "lucide-react";
-import { getPositionColor } from "@/utils";
+import { getPositionColor, isValidPosition } from "@/utils";
+import toast from "react-hot-toast";
 
 interface FieldViewProps {
   players: Player[];
@@ -38,15 +39,7 @@ const PlayerSlot: React.FC<PlayerSlotProps> = ({
     },
     canDrop: (item: DragItem) => {
       // Position validation for visual feedback
-      if (position === "GK")
-        return item.player.position === PlayerPosition.GOALKEEPER;
-      if (position === "DEF")
-        return item.player.position === PlayerPosition.DEFENDER;
-      if (position === "MID")
-        return item.player.position === PlayerPosition.MIDFIELDER;
-      if (position === "ATT")
-        return item.player.position === PlayerPosition.ATTACKER;
-      return false;
+      return isValidPosition(item.player, position);
     },
     collect: (monitor: DropTargetMonitor) => ({
       isOver: monitor.isOver(),
@@ -122,7 +115,7 @@ const PlayerSlot: React.FC<PlayerSlotProps> = ({
       )}
 
       {/* Drop Zone Indicator */}
-      {isOver && (
+      {isOver ? (
         <div
           className={`absolute inset-0 rounded-xl border-2 ${
             canDrop
@@ -130,7 +123,7 @@ const PlayerSlot: React.FC<PlayerSlotProps> = ({
               : "border-red-400 bg-red-100"
           } opacity-50`}
         />
-      )}
+      ) : null}
     </div>
   );
 };
@@ -177,7 +170,7 @@ const SubstitutePlayer: React.FC<SubstitutePlayerProps> = ({ player }) => {
 };
 
 const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
-  const FORMATION_STORAGE_KEY = 'football-manager-formation';
+  const FORMATION_STORAGE_KEY = "football-manager-formation";
 
   // Save formation to localStorage
   const saveFormationToStorage = (formationData: {
@@ -190,13 +183,23 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
       // Convert formation to a serializable format (store only player IDs)
       const serializableFormation = {
         gk: formationData.gk?._id || null,
-        defenders: formationData.defenders.map((p: Player | null) => p?._id || null),
-        midfielders: formationData.midfielders.map((p: Player | null) => p?._id || null),
-        attackers: formationData.attackers.map((p: Player | null) => p?._id || null),
+        defenders: formationData.defenders.map(
+          (p: Player | null) => p?._id || null
+        ),
+        midfielders: formationData.midfielders.map(
+          (p: Player | null) => p?._id || null
+        ),
+        attackers: formationData.attackers.map(
+          (p: Player | null) => p?._id || null
+        ),
       };
-      localStorage.setItem(FORMATION_STORAGE_KEY, JSON.stringify(serializableFormation));
+      localStorage.setItem(
+        FORMATION_STORAGE_KEY,
+        JSON.stringify(serializableFormation)
+      );
     } catch (error) {
-      console.error('Failed to save formation to localStorage:', error);
+      toast.error("Failed to save formation to localStorage:", error);
+      console.error("Failed to save formation to localStorage:", error);
     }
   };
 
@@ -207,22 +210,25 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
       if (!savedFormation) return null;
 
       const parsedFormation = JSON.parse(savedFormation);
-      
+
       // Convert player IDs back to player objects
-      const gk = parsedFormation.gk 
-        ? players.find((p) => p._id === parsedFormation.gk) || null 
+      const gk = parsedFormation.gk
+        ? players.find((p) => p._id === parsedFormation.gk) || null
         : null;
-      
-      const defenders = parsedFormation.defenders.map((id: string | null): Player | null => 
-        id ? players.find((p) => p._id === id) || null : null
+
+      const defenders = parsedFormation.defenders.map(
+        (id: string | null): Player | null =>
+          id ? players.find((p) => p._id === id) || null : null
       );
-      
-      const midfielders = parsedFormation.midfielders.map((id: string | null): Player | null => 
-        id ? players.find((p) => p._id === id) || null : null
+
+      const midfielders = parsedFormation.midfielders.map(
+        (id: string | null): Player | null =>
+          id ? players.find((p) => p._id === id) || null : null
       );
-      
-      const attackers = parsedFormation.attackers.map((id: string | null): Player | null => 
-        id ? players.find((p) => p._id === id) || null : null
+
+      const attackers = parsedFormation.attackers.map(
+        (id: string | null): Player | null =>
+          id ? players.find((p) => p._id === id) || null : null
       );
 
       return {
@@ -232,7 +238,7 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
         attackers,
       };
     } catch (error) {
-      console.error('Failed to load formation from localStorage:', error);
+      console.error("Failed to load formation from localStorage:", error);
       return null;
     }
   };
@@ -310,18 +316,6 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
   const handlePlayerDrop = useCallback((position: string, index: number) => {
     return (draggedPlayer: Player, fromFormation: boolean) => {
       // Position validation - only allow players in their correct positions
-      const isValidPosition = (player: Player, targetPosition: string) => {
-        if (targetPosition === "gk")
-          return player.position === PlayerPosition.GOALKEEPER;
-        if (targetPosition === "defenders")
-          return player.position === PlayerPosition.DEFENDER;
-        if (targetPosition === "midfielders")
-          return player.position === PlayerPosition.MIDFIELDER;
-        if (targetPosition === "attackers")
-          return player.position === PlayerPosition.ATTACKER;
-        return false;
-      };
-
       if (!isValidPosition(draggedPlayer, position)) {
         // Invalid position - don't allow the drop
         return;
@@ -420,11 +414,11 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div 
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
         onClick={onClose}
       >
-        <div 
+        <div
           className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
@@ -516,38 +510,44 @@ const FieldView: React.FC<FieldViewProps> = ({ players, onClose }) => {
 
                 {/* Defenders (4) */}
                 <div className="absolute lg:bottom-28 bottom-20 left-1/2 transform -translate-x-1/2 flex md:space-x-16 space-x-[2rem]">
-                  {formation.defenders.map((player: Player | null, index: number) => (
-                    <PlayerSlot
-                      key={`def-${index}`}
-                      player={player}
-                      position="DEF"
-                      onDrop={handlePlayerDrop("defenders", index)}
-                    />
-                  ))}
+                  {formation.defenders.map(
+                    (player: Player | null, index: number) => (
+                      <PlayerSlot
+                        key={`def-${index}`}
+                        player={player}
+                        position="DEF"
+                        onDrop={handlePlayerDrop("defenders", index)}
+                      />
+                    )
+                  )}
                 </div>
 
                 {/* Midfielders (3) */}
                 <div className="absolute lg:bottom-64 bottom-[9rem] left-1/2 transform -translate-x-1/2 flex md:space-x-[12rem] space-x-[4rem]">
-                  {formation.midfielders.map((player: Player | null, index: number) => (
-                    <PlayerSlot
-                      key={`mid-${index}`}
-                      player={player}
-                      position="MID"
-                      onDrop={handlePlayerDrop("midfielders", index)}
-                    />
-                  ))}
+                  {formation.midfielders.map(
+                    (player: Player | null, index: number) => (
+                      <PlayerSlot
+                        key={`mid-${index}`}
+                        player={player}
+                        position="MID"
+                        onDrop={handlePlayerDrop("midfielders", index)}
+                      />
+                    )
+                  )}
                 </div>
 
                 {/* Attackers (3) */}
                 <div className="absolute lg:bottom-[28rem] bottom-[16rem] left-1/2 transform -translate-x-1/2 flex md:space-x-20 space-x-[4rem]">
-                  {formation.attackers.map((player: Player | null, index: number) => (
-                    <PlayerSlot
-                      key={`att-${index}`}
-                      player={player}
-                      position="ATT"
-                      onDrop={handlePlayerDrop("attackers", index)}
-                    />
-                  ))}
+                  {formation.attackers.map(
+                    (player: Player | null, index: number) => (
+                      <PlayerSlot
+                        key={`att-${index}`}
+                        player={player}
+                        position="ATT"
+                        onDrop={handlePlayerDrop("attackers", index)}
+                      />
+                    )
+                  )}
                 </div>
               </div>
             </div>
