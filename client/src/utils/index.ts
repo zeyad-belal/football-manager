@@ -49,13 +49,13 @@ export const getPositionColor = (pos: string, type: 'gradient' | 'badge' = 'grad
     };
 
     export const isValidPosition = (player: { position: string }, targetPosition: string): boolean => {
-      if (targetPosition === "gk")
-        return player.position === "GOALKEEPER";
-      if (targetPosition === "defenders")
-        return player.position === "DEFENDER";
-      if (targetPosition === "midfielders")
-        return player.position === "MIDFIELDER";
-      if (targetPosition === "attackers")
-        return player.position === "ATTACKER";
+      if (targetPosition === "gk" || targetPosition === "GK")
+        return player.position === "Goalkeeper";
+      if (targetPosition === "defenders" || targetPosition === "DEF")
+        return player.position === "Defender";
+      if (targetPosition === "midfielders" || targetPosition === "MID")
+        return player.position === "Midfielder";
+      if (targetPosition === "attackers" || targetPosition === "ATT")
+        return player.position === "Attacker";
       return false;
     };
