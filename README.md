@@ -81,3 +81,7 @@ npm run dev
 | - Manual testing | 30 min |
 | - Documentation | 30 min |
 | **Total Time** | **13 hours** |
+
+
+
+![alt text](image.png)
