@@ -4,6 +4,29 @@
 
 A full-stack web application for managing football fantasy teams, built with React, TypeScript, Node.js, Express, and MongoDB.
 
+## Tech Stack
+
+### Frontend
+- **React 18** - UI framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Lucide React** - Icons
+- **React Router** - Navigation
+- **React Hook Form** - Form handling
+- **Axios** - HTTP client
+- **React Hot Toast** - Notifications
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express** - Web framework
+- **TypeScript** - Type safety
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **JWT** - Authentication
+- **bcryptjs** - Password hashing
+- **Zod** - Validation
+- **Helmet** - Security middleware
+
 ## Setup Instructions
 
 ### Prerequisites
