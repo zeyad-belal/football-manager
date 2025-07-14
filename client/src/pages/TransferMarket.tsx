@@ -6,6 +6,7 @@ import { transferService } from "@/services/api";
 import { Player, PlayerPosition, TransferFilters } from "@/types";
 import { Search, Filter, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
 
 const TransferMarket: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -14,6 +15,7 @@ const TransferMarket: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
 
+  const { team } = useAuth();
   const { register, handleSubmit, watch, reset } = useForm<TransferFilters>();
 
   const loadTransferMarket = async (
@@ -219,14 +221,19 @@ const TransferMarket: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 mb-8">
-              {players.map((player) => (
-                <PlayerCard
-                  key={player._id}
-                  player={player}
-                  isOwned={false}
-                  onUpdate={() => loadTransferMarket(watch(), currentPage)}
-                />
-              ))}
+              {players.map((player) => {
+                // Check if this player belongs to the current user's team
+                const isOwned = team?.players?.some(p => p._id === player._id) || false;
+                
+                return (
+                  <PlayerCard
+                    key={player._id}
+                    player={player}
+                    isOwned={isOwned}
+                    onUpdate={() => loadTransferMarket(watch(), currentPage)}
+                  />
+                );
+              })}
             </div>
 
             {/* Empty State */}

@@ -61,8 +61,10 @@ JWT_SECRET=your-super-secret-jwt-key
 JWT_EXPIRES_IN=7d
 PORT=5000
 NODE_ENV=development
-CLIENT_URL=http://localhost:5173
+CLIENT_URL=http://localhost:3000
 ```
+
+
 
 ### 3. Run the Application
 

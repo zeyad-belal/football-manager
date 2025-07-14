@@ -55,7 +55,7 @@ export const removePlayerFromTransferList = async (req: AuthRequest, res: Respon
 
 export const getTransferMarket = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    // After validation, req.query will have the correct types from our zod schema
+
     const {
       page,
       limit,
@@ -64,7 +64,7 @@ export const getTransferMarket = async (req: AuthRequest, res: Response): Promis
       minPrice,
       maxPrice,
       position
-    } = req.query as any; // Type assertion since zod validation ensures correct types
+    } = req.query as any;
 
     const filters = {
       teamName,

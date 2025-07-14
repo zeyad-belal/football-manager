@@ -72,7 +72,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
   // Check if user can list this player (must have more than 15 available players)
   const canListPlayer = isOwned && !player.isOnTransferList && availablePlayers.length > 15;
   
-  // Check if user can buy (must have less than 25 total players and sufficient budget)
+  // Check if user can buy (must have less than 25 total players and sufficient budget and not own player)
   const canBuy = !isOwned && 
     player.isOnTransferList && 
     team && 
@@ -154,16 +154,18 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
               player.isOnTransferList && (
                 <button
                   onClick={handleBuyPlayer}
-                  disabled={isLoading || !canBuy}
+                  disabled={isLoading || !canBuy || isOwned}
                   className={`flex-1 flex items-center justify-center ${
-                    canBuy ? 'btn-success' : 'btn-secondary opacity-50 cursor-not-allowed'
+                    canBuy && !isOwned ? 'btn-success' : 'btn-secondary opacity-50 cursor-not-allowed'
                   }`}
                   title={
-                    !canBuy 
-                      ? totalPlayers >= 25 
-                        ? 'Cannot buy: Team already has 25 players' 
-                        : 'Insufficient budget'
-                      : ''
+                    isOwned 
+                      ? 'Cannot buy your own player'
+                      : !canBuy 
+                        ? totalPlayers >= 25 
+                          ? 'Cannot buy: Team already has 25 players' 
+                          : 'Insufficient budget'
+                        : ''
                   }
                 >
                   {isLoading ? (
@@ -171,11 +173,13 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
                   ) : (
                     <>
                       <ShoppingCart className="h-4 w-4 mr-1" />
-                      {canBuy 
-                        ? 'Buy Player' 
-                        : totalPlayers >= 25 
-                          ? 'Team Full' 
-                          : 'Insufficient Budget'
+                      {isOwned 
+                        ? 'Your Player'
+                        : canBuy 
+                          ? 'Buy Player' 
+                          : totalPlayers >= 25 
+                            ? 'Team Full' 
+                            : 'Insufficient Budget'
                       }
                     </>
                   )}
