@@ -81,8 +81,8 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
 
   return (
     <>
-      <div className="card">
-        <div className="card-body">
+      <div className="card h-full flex flex-col">
+        <div className="card-body flex flex-col flex-1">
           <div className="flex justify-between md:flex-row flex-col items-start mb-3">
             <div>
               <h3 className="md:text-lg text-sm font-medium text-gray-900 truncate">
@@ -95,7 +95,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
             </span>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 flex-1">
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Value:</span>
               <span className="font-medium">{formatCurrency(player.value)}</span>
