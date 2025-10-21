@@ -60,7 +60,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player, isOwned = false, onUpda
       await refreshProfile();
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to buy player');
-    } finally {
+    } finally { 
       setIsLoading(false);
     }
   };
